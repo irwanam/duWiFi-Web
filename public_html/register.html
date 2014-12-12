@@ -1,0 +1,201 @@
+<div id="reg" class="page">
+    <div class="grid">
+        <div class="row">
+            <div class="span12">
+                <h1><a href="#ctn" onclick="defaultPage();return false"><i class="icon-arrow-left-3 fg-darker smaller"></i></a> Buat akun baru<small class="on-right">gratis!</small></h1>
+                <p>
+                    Mendaftarkan akun anda untuk mendapatkan akses internet gratis dengan duWiFi.
+                    Akun anda dapat digunakan pada setiap hotspot area dengan SSID duWiFi.
+                </p>
+                <form id="frm_reg" method="post" action="">
+                    <div class="row">
+                        <div class="span6">
+                            <label for="inputFirstName">Nama</label>
+                            <div class="row">
+                                <div class="span3">
+                                    <div class="input-control text">
+                                        <input id="inputFirstName" name="first_name" type="text" placeholder="Depan"/>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="input-control text">
+                                        <input id="inputLastName" name="last_name" type="text" placeholder="Belakang"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span6">
+                            <label for="inputEmail">Email</label>
+                            <div class="row">
+                                <div class="span3">
+                                    <div class="input-control email">
+                                        <input id="inputEmail" name="email" type="email" placeholder="Alamat email"/>
+                                    </div>
+                                </div>                            
+                                <div class="span3">
+                                    <div class="input-control email">
+                                        <input id="inputEmailRe" name="emailre" type="email" placeholder="Ulangi alamat email"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div><small class="text-warning">Mohon isi dengan alamat email yang valid. Kami akan mengirimkan email verifikasi ke alamat email tersebut</small></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span6">
+                            <label for="inputPasswoord">Kata Sandi</label>
+                            <div class="row">
+                                <div class="span3">
+                                    <div class="input-control password">
+                                        <input id="inputPassword" name="password" type="password" placeholder="Password"/>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="input-control password">
+                                        <input id="inputPasswordRe" name="passwordre" type="password" placeholder="Ulangi password"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span6">
+                            <label for="inputRegVerification">Kami ingin memastikan bahwa anda bukan spam atau bot.</label>
+                            <div class="row">
+                                <div class="span6">
+                                    <div class="input-control text">
+                                        <div id="inputRegVerification"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="span6">
+                        <label for="inputAgreement">Dengan menekan tombol <strong>Daftar Sekarang</strong>, Anda menyetujui Ketentuan kami dan bahwa anda telah membaca <a href="#">Kebijakan Penggunaan Data</a> kami, termasuk <a>Penggunaan Kuki</a></label>
+                        <div class="row">
+                            <div class="span6">
+                                <div class="input-control text">
+                                    <button id="inputRegBtn" class="primary" type="button">Mendaftar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#frm_reg").validate({
+        rules: {
+            first_name: {
+                required: true
+            },
+            last_name: {
+                required: true
+            },
+            email: {
+                equalTo: "#inputEmailRe",
+                required: true,
+                email: true
+            },
+            password: {
+                equalTo: "#inputPasswordRe",
+                required: true,
+                minlength: 8
+            }
+        },
+        messages: {
+            first_name: {
+                required: "Nama tidak boleh dibiarkan kosong."
+            },
+            last_name: {
+                required: "Nama tidak boleh dibiarkan kosong."
+            },
+            email: {
+                required: "Email tidak boleh dibiarkan kosong.",
+                equalTo: "Email tidak cocok, Coba lagi?",
+                email: "Silahkan isi dengan alamat email yang valid."
+            },
+            password: {
+                required: "Kata Sandi tidak boleh dibiarkan kosong.",
+                equalTo: "Kata Sandi tidak cocok, Coba lagi?",
+                minlength: "Kata Sandi pendek mudah ditebak. Cobalah sandi yang panjangnya minimal 8 karakter."
+            }
+        }
+    });
+        
+    $('#inputRegBtn').click(function(){
+        if($("#frm_reg").valid()!==true){
+            $.Dialog({
+                shadow: true,
+                overlay: true,
+                icon: '<span class="icon-checkbox"></span>',
+                title: 'Form Registrasi',
+                width: 200,
+                padding: 10,
+                content: '<p>Silahkan isi data pada formulir pendaftaran dengan benar.<p>'
+            });
+        } else {
+            var response = 'captchaResponse='+$('#g-recaptcha-response').val();
+            var dataReg = {
+                        first_name : $('#inputFirstName').val(),
+                        last_name : $('#inputLastName').val(),
+                        email : $('#inputEmail').val(),
+                        password : $('#inputPassword').val()
+                    };
+            $.ajax({
+                type: 'POST',
+                url: 'app/Captcha.php',
+                data: response,
+                success: function (data) {
+                            //console.log(data);
+                            var status = $.parseJSON(data);
+                            //alert(reg);
+                            if(status.success==='true'){
+                                RegNewMember(dataReg);
+                            } else {
+                                $.Dialog({
+                                    shadow: true,
+                                    overlay: true,
+                                    icon: '<span class="icon-checkbox"></span>',
+                                    title: 'Human Verification',
+                                    width: 200,
+                                    padding: 10,
+                                    content: '<p>Mohon lakukan verifikasi terlebih dahulu untuk memastikan bahwa anda bukan spam atau robot.<p>'
+                                });
+                            }
+                        }                    
+            });
+        }
+    });
+    
+    var RegNoReVerification;
+    var onloadCallback = function() {
+        RegNoReVerification = grecaptcha.render('inputRegVerification', {
+            'sitekey' : '6Lf_4f4SAAAAAHkUuxnRLCcRNY6yatXHTz2y-tX2'
+        });
+    };
+    
+    //var dataString = $("#InputFirstName").val();
+    
+    function RegNewMember(data){
+            var dataString = 'RegTrigger=true&first_name='+data.first_name+'&last_name='+data.last_name+'&email='+data.email+'&password='+data.password;
+                //console.log(dataString);
+                $.ajax({
+                    type: 'POST',
+                    url: 'app/Member.php',
+                    data: dataString,
+                    success: function (data) {
+                            console.log(data);
+                            
+                        }
+                });
+    }
+    
+</script>
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
