@@ -2,7 +2,9 @@
     class Captcha
     {
         protected $secretKey = '6Lf_4f4SAAAAAMg2IZqMYK3R-IHs4LSpRPMOE-QA';
-        
+        protected $remote_ip;
+        protected $response;
+        protected $request;
         public function __construct()
         {
 
@@ -11,8 +13,7 @@
         {
             $this->remote_ip = $_SERVER['REMOTE_ADDR'];
             $this->response = $response;
-            $this->secret = $this->secretKey;
-            $this->request = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$this->secret}&response={$this->response}&remoteip={$this->remote_ip}");
+            $this->request = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$this->secretKey}&response={$this->response}&remoteip={$this->remote_ip}");
             
             if(!strstr($this->request, "true")){
                 $arr = array(

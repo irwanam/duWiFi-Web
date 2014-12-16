@@ -22,5 +22,18 @@
             $sth->bindParam(':value',$data['value'],PDO::PARAM_STR);
             $sth->execute();
         }
-    }
+        
+        public function insertRadreply($data)
+        {
+            $con = new Database();
+            $db = $con->connect();
+            $sth = $db->prepare("INSERT INTO radreply (id,username,attribute,op,value) VALUES (:id,:username,:attribute,:op,:value)");
+            $sth->bindParam(':id',$data['id'],PDO::PARAM_INT);
+            $sth->bindParam(':username',$data['username'],PDO::PARAM_STR);
+            $sth->bindParam(':attribute',$data['attribute'],PDO::PARAM_STR);
+            $sth->bindParam(':op',$data['op'],PDO::PARAM_STR);
+            $sth->bindParam(':value',$data['value'],PDO::PARAM_STR);
+            $sth->execute();
+        }
+    }   
 ?>

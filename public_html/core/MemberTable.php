@@ -23,12 +23,13 @@
             $sth->execute();
         }
         
-        public function findUsername($username)
+        public function checkMember($key, $val)
         {
             $con = new Database();
             $db = $con->connect();
-            $data = $db->query("SELECT username FROM member WHERE username='$username'");
-            if($data !== false){
+            $data = $db->query("SELECT $key FROM member WHERE $key='$val'");
+            $exist = $data->rowCount();
+            if($exist !== 0){
 		return true;
             } else {
                 return false;

@@ -76,15 +76,27 @@
             return $member;
         }
         
+        public function existEmail($email)
+        {
+            $table = new MemberTable();
+            $data = $table->checkMember('email', $email);
+            if($data === false){
+                $arr = 'true';
+            } else {
+                $arr = 'false';
+            }
+            return $arr;
+        }
+        
         function newUsername($length)
         {
             $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            $uname = new MemberTable();
+            $table = new MemberTable();
             
             do{
                 $username = substr( str_shuffle( $chars ), 0, $length );
-                $exist = $uname->findUsername($username);
-            } while ($exist == false);
+                $exist = $table->checkMember('username', $username);
+            } while ($exist !== false);
             
             return $username;
         }

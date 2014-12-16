@@ -99,12 +99,26 @@
                 required: true
             },
             email: {
-                equalTo: "#inputEmailRe",
+                //equalTo: "#inputEmailRe",
+                required: true,
+                email: true,
+                remote: {
+                    type: 'post',
+                    url: 'app/Member.php'
+                }
+            },
+            emailre: {
+                equalTo: "#inputEmail",
                 required: true,
                 email: true
             },
             password: {
-                equalTo: "#inputPasswordRe",
+                //equalTo: "#inputPasswordRe",
+                required: true,
+                minlength: 8
+            },
+            passwordre: {
+                equalTo: "#inputPassword",
                 required: true,
                 minlength: 8
             }
@@ -119,9 +133,20 @@
             email: {
                 required: "Email tidak boleh dibiarkan kosong.",
                 equalTo: "Email tidak cocok, Coba lagi?",
+                email: "Silahkan isi dengan alamat email yang valid.",
+                remote: "Email sudah pernah terdaftar, silahkan gunakan email lain."
+            },
+            emailre: {
+                required: "Email tidak boleh dibiarkan kosong.",
+                equalTo: "Email tidak cocok, Coba lagi?",
                 email: "Silahkan isi dengan alamat email yang valid."
             },
             password: {
+                required: "Kata Sandi tidak boleh dibiarkan kosong.",
+                equalTo: "Kata Sandi tidak cocok, Coba lagi?",
+                minlength: "Kata Sandi pendek mudah ditebak. Cobalah sandi yang panjangnya minimal 8 karakter."
+            },
+            passwordre: {
                 required: "Kata Sandi tidak boleh dibiarkan kosong.",
                 equalTo: "Kata Sandi tidak cocok, Coba lagi?",
                 minlength: "Kata Sandi pendek mudah ditebak. Cobalah sandi yang panjangnya minimal 8 karakter."
@@ -153,11 +178,12 @@
                 url: 'app/Captcha.php',
                 data: response,
                 success: function (data) {
-                            //console.log(data);
+                            console.log(data);
                             var status = $.parseJSON(data);
-                            //alert(reg);
+                            //alert(status.success);
                             if(status.success==='true'){
                                 RegNewMember(dataReg);
+                                //alert(dataReg);
                             } else {
                                 $.Dialog({
                                     shadow: true,
@@ -181,20 +207,18 @@
         });
     };
     
-    //var dataString = $("#InputFirstName").val();
-    
     function RegNewMember(data){
-            var dataString = 'RegTrigger=true&first_name='+data.first_name+'&last_name='+data.last_name+'&email='+data.email+'&password='+data.password;
-                //console.log(dataString);
-                $.ajax({
-                    type: 'POST',
-                    url: 'app/Member.php',
-                    data: dataString,
-                    success: function (data) {
-                            console.log(data);
-                            
-                        }
-                });
+        var dataString = 'RegTrigger=true&first_name='+data.first_name+'&last_name='+data.last_name+'&email='+data.email+'&password='+data.password;
+        
+        $.ajax({
+             type: 'post',
+             url: "app/Member.php",
+             data: dataString,
+             success: function(data){
+                     //console.log(data);
+                     grecaptcha.reset(RegNoReVerification);
+                 }
+         });
     }
     
 </script>
