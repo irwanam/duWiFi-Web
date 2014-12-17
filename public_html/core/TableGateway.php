@@ -23,11 +23,5 @@
             return $record;
         }  
         
-        public function updateData()
-        {
-            $con = new Database();
-            $db = $con->connect();
-            
-        }
     }
 ?>

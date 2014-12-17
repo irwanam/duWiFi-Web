@@ -22,7 +22,29 @@
             $sth->bindParam(':value',$data['value'],PDO::PARAM_STR);
             $sth->execute();
         }
+
+        public function updateRadcheck($data)
+        {
+            $con = new Database();
+            $db = $con->connect();
+            $sth = $db->prepare("UPDATE radcheck SET value=:value WHERE id=:id");
+            $sth->bindParam(':id',$data['id'],PDO::PARAM_INT);
+            $sth->bindParam(':value',$data['value'],PDO::PARAM_STR);
+            $sth->execute();
+        }
         
+        public function findRadcheck($data)
+        {
+            $username = $data['username'];
+            $attribute = $data['attribute'];
+            $con = new Database();
+            $db = $con->connect();
+            $res = $db->query("SELECT * FROM radcheck where username='$username' AND attribute='$attribute'");
+            
+            $record = $res->fetch(PDO::FETCH_ASSOC);
+            return $record;
+        }
+
         public function insertRadreply($data)
         {
             $con = new Database();

@@ -18,13 +18,17 @@
         //Insert into database
         $resMember = $member->saveMember($member->exchangeArray($data));
         $resAccount = $radius->addAccount($member->exchangeArray($data));
+        //Default Limit 512k/512k
         $resRateLimit= $radius->addRateLimit($data['username'],'512k/512k');
+        //Bonus Session Time 1hrs / 3600second
+        $resSessionTime = $radius->setSessionTime($data['username'],3600);
         
         //JSON feedback
         echo '[';
         echo json_encode($resMember);
         echo json_encode($resAccount);
         echo json_encode($resRateLimit);
+        echo json_encode($resSessionTime);
         echo ']';
         
     }

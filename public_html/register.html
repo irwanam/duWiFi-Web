@@ -2,7 +2,7 @@
     <div class="grid">
         <div class="row">
             <div class="span12">
-                <h1><a href="#ctn" onclick="defaultPage();return false"><i class="icon-arrow-left-3 fg-darker smaller"></i></a> Buat akun baru<small class="on-right">gratis!</small></h1>
+                <h1><a href="#ctn" onclick="defaultPage();return false"><i class="icon-arrow-left-3 fg-darker smaller"></i></a> Daftar<small class="on-right">gratis!</small></h1>
                 <p>
                     Mendaftarkan akun anda untuk mendapatkan akses internet gratis dengan duWiFi.
                     Akun anda dapat digunakan pada setiap hotspot area dengan SSID duWiFi.
@@ -78,7 +78,7 @@
                         <label for="inputAgreement">Dengan menekan tombol <strong>Daftar Sekarang</strong>, Anda menyetujui Ketentuan kami dan bahwa anda telah membaca <a href="#">Kebijakan Penggunaan Data</a> kami, termasuk <a>Penggunaan Kuki</a></label>
                         <div class="row">
                             <div class="span6">
-                                <div class="input-control text">
+                                <div class="input-control button primary">
                                     <button id="inputRegBtn" class="primary" type="button">Mendaftar</button>
                                 </div>
                             </div>
@@ -163,7 +163,7 @@
                 title: 'Form Registrasi',
                 width: 200,
                 padding: 10,
-                content: '<p>Silahkan isi data pada formulir pendaftaran dengan benar.<p>'
+                content: '<p>Silahkan isi data pada formulir pendaftaran dengan benar.</p>'
             });
         } else {
             var response = 'captchaResponse='+$('#g-recaptcha-response').val();
@@ -178,12 +178,22 @@
                 url: 'app/Captcha.php',
                 data: response,
                 success: function (data) {
-                            console.log(data);
+                            //console.log(data);
                             var status = $.parseJSON(data);
                             //alert(status.success);
                             if(status.success==='true'){
+                                $.Dialog({
+                                        shadow: true,
+                                        overlay: true,
+                                        icon: '<span class="icon-checkbox"></span>',
+                                        title: 'Pendaftaran Berhasil',
+                                        width: 200,
+                                        padding: 10,
+                                        content: '<p>Selamat, akun anda berhasil dibuat.<br/>Silahkan gunakan akun anda di setiap area duWiFi.</p>'
+                                    });
                                 RegNewMember(dataReg);
-                                //alert(dataReg);
+                                grecaptcha.reset(RegNoReVerification);
+                                document.getElementById("frm_reg").reset();
                             } else {
                                 $.Dialog({
                                     shadow: true,
@@ -192,7 +202,7 @@
                                     title: 'Human Verification',
                                     width: 200,
                                     padding: 10,
-                                    content: '<p>Mohon lakukan verifikasi terlebih dahulu untuk memastikan bahwa anda bukan spam atau robot.<p>'
+                                    content: '<p>Mohon lakukan verifikasi terlebih dahulu untuk memastikan bahwa anda bukan spam atau robot.</p>'
                                 });
                             }
                         }                    
@@ -211,14 +221,13 @@
         var dataString = 'RegTrigger=true&first_name='+data.first_name+'&last_name='+data.last_name+'&email='+data.email+'&password='+data.password;
         
         $.ajax({
-             type: 'post',
-             url: "app/Member.php",
-             data: dataString,
-             success: function(data){
-                     //console.log(data);
-                     grecaptcha.reset(RegNoReVerification);
-                 }
-         });
+            type: 'post',
+            url: "app/Member.php",
+            data: dataString,
+            success: function(data){
+                console.log(data);
+                }
+        });
     }
     
 </script>

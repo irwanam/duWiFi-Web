@@ -13,13 +13,20 @@
     <body class="metro">
         <header data-load="header.html">
             <nav class="navigation-bar dark" role="navigation">
-                <div class="navigation-bar-content container">      
-
-                    <a class="element brand-title" href="#">DU WIFI</a>
+                <div class="navigation-bar-content container">
+                    
+                    <a class="element brand-title" href="index.html">DU WIFI</a>
 
                     <span class="element-divider"></span>
                     <a class="element1 pull-menu" href="#" ></a>
+                    
                     <ul class="element-menu">
+                        <li class="no-desktop">
+                            <a href="#ctn" onclick="loginPage();return false" class="element-menu button primary">MASUK</a>
+                        </li>
+                        <li class="no-desktop">
+                            <a href="#ctn" onclick="regPage();return false" class="element-menu button success">DAFTAR</a>
+                        </li>
                         <li>
                             <a href="http://www.datautama.net.id" target="blank">DATA UTAMA NET</a>
                         </li>
@@ -29,30 +36,21 @@
                     </ul>
                      
                         <div class="no-tablet-portrait no-phone">
-                            <div class="place-right">
-                                <div class="element input-element">
-                                    <form>
-                                        <div class="input-control text">
-                                            <input type="text" placeholder="Nama / Email" name="name">
-                                            <button class="btn-clear"></button>
-                                        </div>
-                                        <div class="input-control text">
-                                            <input type="text" placeholder="Kata Sandi" name="password">
-                                            <button class="btn-clear"></button>
-                                        </div>
-                                        <div class="input-control text">
-                                            <button class="primary">Masuk</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>    
+                            <ul class="element-menu place-right">
+                                <li>
+                                    <a href="#ctn" onclick="loginPage();return false"><span class="icon-user"></span> MASUK</a>
+                                </li>
+                                <li>
+                                    <a href="#ctn" onclick="regPage();return false"><span class="icon-bookmark"></span> DAFTAR</a>
+                                </li>
+                            </ul>   
                         </div>
                         
                 </div>
             </nav>
         </header>
         <main>
-            <div style="background: url(assets/img/bg1.jpg) top left no-repeat; background-size: cover; height: 300px;">
+            <div class="no-tablet-portrait no-phone" style="background: url(assets/img/bg1.jpg) top left no-repeat; background-size: cover; height: 300px;">
                 <div class="container" style="padding: 50px 20px">
                     <h1 class="fg-white">du WiFi</h1>
                     <h2 class="fg-white">
@@ -76,33 +74,5 @@
         <script src="js/metro/metro.min.js"></script>
         <script src="js/jquery.validate.js"></script>
         <script src="js/docs.js"></script>
-        <script>
-            function regPage(){
-                $("#ctn").load('register.html');
-            }
-            function defaultPage(){
-                $("#ctn").load('default.html');
-            }
-            $(document).ready(function(){
-                //Smooth Scroll
-                $('a[href^="#"]').on('click',function (e) {
-                    e.preventDefault();
-
-                    var target = this.hash;
-                    $target = $(target);
-
-                    $('html, body').stop().animate({
-                        'scrollTop': $target.offset().top
-                    }, 900, 'swing', function () {
-                        window.location.hash = target;
-                    });
-                });
-                //Load Default Page
-                $("#ctn").load('default.html');
-                //$("header").load($("header").data('load'));
-            });
-            
-            
-        </script>
     </body>
 </html>
