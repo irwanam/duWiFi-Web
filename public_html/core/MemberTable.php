@@ -35,5 +35,27 @@
                 return false;
             }
         }
+        
+        public function checkLogin($data)
+        {
+            $con = new Database();
+            $db = $con->connect();
+            $data = $db->query("SELECT id FROM member WHERE email='$data->email' AND password='$data->password'");
+            $exist = $data->rowCount();
+            $member = $data->fetch(PDO::FETCH_ASSOC);
+            
+            if($exist !== 0){
+                $arr = array(
+                    'success' => 'true',
+                    'id' => $member['id']
+                );
+		
+            } else {
+                $arr = array(
+                    'success' => 'false'
+                );
+            }
+            return $arr;
+        }
     }
 ?>

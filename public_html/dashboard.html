@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>duWiFi</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/iconFont.min.css">
+        <link rel="stylesheet" href="css/metro-bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="css/metro-bootstrap.min.css">
+        <link rel="stylesheet" href="css/no-theme/jquery-ui-1.9.2.custom.min.css">
+        <link rel="stylesheet" href="css/duwifi.css">
+    </head>
+    <body class="metro">
+        <h1>Dashboard Page</h1>
+        
+        
+        <footer></footer>
+        <script src="js/jquery-2.1.1.min.js"></script>
+        <script src="js/jquery-ui-1.9.2.custom.min.js"></script>
+        <script src="js/metro/metro.min.js"></script>
+        <script src="js/jquery.validate.js"></script>
+        <script src="js/docs.js"></script>
+        <script src="js/session.js"></script>
+        <script>
+            $(document).ready(function(){
+                isLogged(function(status){
+                    console.log(status);
+                    if(status.logged==='false')window.location.replace("index.html");
+                });
+            });
+        </script>
+    </body>
+</html>

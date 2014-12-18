@@ -100,5 +100,12 @@
             
             return $username;
         }
+        
+        function memberLogin($data)
+        {
+            $table = new MemberTable();
+            $login = $table->checkLogin($data);
+            return $login;
+        }
     }
 ?>

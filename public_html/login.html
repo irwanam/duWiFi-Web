@@ -22,7 +22,7 @@
                     <div class="row">
                         <div class="span3">
                             <div class="input-control button primary">
-                                <button class="primary" type="button">Masuk</button>
+                                <button id="inputLoginBtn" class="primary" type="button">Masuk</button>
                             </div>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
         }
     });
         
-    $('#inputLoginBtn').click(function(){
+    $("#inputLoginBtn").click(function(){
         if($("#frm_login").valid()!==true){
             $.Dialog({
                 shadow: true,
@@ -70,49 +70,12 @@
                 content: '<p>Silahkan isi email / password dengan benar.</p>'
             });
         } else {
-            var response = 'captchaResponse='+$('#g-recaptcha-response').val();
-            var dataReg = {
-                        first_name : $('#inputFirstName').val(),
-                        last_name : $('#inputLastName').val(),
+            var dataLogin = {
                         email : $('#inputEmail').val(),
                         password : $('#inputPassword').val()
                     };
-            $.ajax({
-                type: 'POST',
-                url: 'app/Captcha.php',
-                data: response,
-                success: function (data) {
-                            //console.log(data);
-                            var status = $.parseJSON(data);
-                            //alert(status.success);
-                            if(status.success==='true'){
-                                $.Dialog({
-                                        shadow: true,
-                                        overlay: true,
-                                        icon: '<span class="icon-checkbox"></span>',
-                                        title: 'Pendaftaran Berhasil',
-                                        width: 200,
-                                        padding: 10,
-                                        content: '<p>Selamat, akun anda berhasil dibuat.<br/>Silahkan gunakan akun anda di setiap area duWiFi.</p>'
-                                    });
-                                RegNewMember(dataReg);
-                                grecaptcha.reset(RegNoReVerification);
-                                document.getElementById("frm_reg").reset();
-                            } else {
-                                $.Dialog({
-                                    shadow: true,
-                                    overlay: true,
-                                    icon: '<span class="icon-checkbox"></span>',
-                                    title: 'Human Verification',
-                                    width: 200,
-                                    padding: 10,
-                                    content: '<p>Mohon lakukan verifikasi terlebih dahulu untuk memastikan bahwa anda bukan spam atau robot.</p>'
-                                });
-                            }
-                        }                    
-            });
+            memberLogin(dataLogin);
         }
-    });
-        
+    });   
 </script>
 <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
