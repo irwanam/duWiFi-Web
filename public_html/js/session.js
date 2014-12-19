@@ -42,6 +42,7 @@ function memberLogin(data){
 }
 
 function memberLogout(){
+    stopInet();
     var dataLogout= "session_logout=true";
     $.ajax({
         type: 'post',

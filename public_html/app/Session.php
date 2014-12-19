@@ -11,20 +11,13 @@
                 'name' => $_SESSION['name'],
                 'email' => $_SESSION['email'],
                 'username' => $_SESSION['username'],
-                'password' => $_SESSION['password']
+                'password' => $_SESSION['password'],
+                'hotspot' => (isset($_SESSION['hotspot']))? $_SESSION['hotspot'] : 'offline'
             );
         } else{
             $arr = array (
                 'logged' => 'false'
             );
-        }
-        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-            header('Access-Control-Allow-Origin: *');
-            header('Access-Control-Allow-Methods: POST, GET, PUT, DELETE');
-            header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
-        }
-        else {
-            header('Access-Control-Allow-Origin: *');
         }
         echo json_encode($arr);
     }
@@ -40,5 +33,9 @@
     
     if(isset($_POST['session_logout'])){
         $session->stop();
+    }
+    
+    if(isset($_POST['session_hotspot_login'])){
+        ($_POST['session_hotspot_login']=="online")?$_SESSION['hotspot'] = 'online':$_SESSION['hotspot'] = 'offline';
     }
 ?>

@@ -70,7 +70,7 @@
                                     <div id="inetBtnCtn" class="list-content bg-lightGreen fg-white">
                                         <i class="icon icon-switch"></i>
                                         <div class="data">
-                                            <span class="list-title">Mulai</span>
+                                            <span id="inetBtnState" class="list-title"></span>
                                             <div id="inetBtnProgress" class="progress-bar"
                                                 data-role="progress-bar"
                                                 data-value="100"
@@ -107,14 +107,33 @@
                     $("#navMemberIcon").attr('src','assets/members/icon/'+status.idmember+'.png');
                     $("#navMemberIcon-ph").attr('src','assets/members/icon/'+status.idmember+'.png');
                     loginData = 'username='+status.username+'&password='+status.password;
+                    hotspotStatus = status.hotspot;
+                    if(status.hotspot==='offline'){
+                        offlineInetState()
+                    } else {
+                        onlineInetState();
+                    }
                 });
             });
             function startInet()
             {
-                console.log(loginData);
+                //console.log(loginData);
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://portal.duwifi.net/login.html',
+                    data: loginData,
+                    contentType : 'text/plain',
+                    crossDomain : true
+                });
+                
+                var loginHotspot = "session_hotspot_login=online";
+                $.ajax({
+                    type: 'POST',
+                    url: 'app/Session.php',
+                    data: loginHotspot,
+                });onlineInetState();
+                
                 var pb = $("#inetBtnProgress").progressbar();
-                $("#inetBtnCtn").attr('class','list-content bg-lightRed fg-white');
-                $("#inetBtn").attr('onclick','stopInet();return false');
                 pb.progressbar('color', 'bg-red');
                 //var progress = 0;
                 //var progressInterval = (session-inet-limit/100)*1000
@@ -126,20 +145,42 @@
                 //            //stopInet();
                 //        }
                 //    }, 100);
+                alert('Test Start Hotspot Sukses');
+            }
+            function stopInet()
+            {
                 $.ajax({
                     type: 'POST',
-                    url: 'http://portal.duwifi.net/login.html',
+                    url: 'http://portal.duwifi.net/logout.html',
                     data: loginData,
                     contentType : 'text/plain',
                     crossDomain : true
                 });
-                alert('Test Login Sukses');
+                
+                var logoutHotspot = "session_hotspot_login=offline";
+                $.ajax({
+                    type: 'POST',
+                    url: 'app/Session.php',
+                    data: logoutHotspot,
+                });
+                offlineInetState();
+                alert('Test Stop Hotspot Sukses');
             }
-            function stopInet()
+            
+            function onlineInetState()
+            {
+                var pb = $("#inetBtnProgress").progressbar();
+                $("#inetBtnCtn").attr('class','list-content bg-lightRed fg-white');
+                $("#inetBtn").attr('onclick','stopInet();return false');
+                $("#inetBtnState").text('STOP');
+                pb.progressbar('color', 'bg-red');
+            }
+            function offlineInetState()
             {
                 var pb = $("#inetBtnProgress").progressbar();
                 $("#inetBtnCtn").attr('class','list-content bg-lightGreen fg-white');
                 $("#inetBtn").attr('onclick','startInet();return false');
+                $("#inetBtnState").text('MULAI');
                 pb.progressbar('color', 'bg-green');
             }
         </script>
