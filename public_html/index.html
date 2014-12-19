@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="css/duwifi.css">
     </head>
     <body class="metro">
-        <header data-load="header.html">
+        <header>
             <nav class="navigation-bar dark" role="navigation">
                 <div class="navigation-bar-content container">
                     
@@ -75,5 +75,13 @@
         <script src="js/jquery.validate.js"></script>
         <script src="js/docs.js"></script>
         <script src="js/session.js"></script>
+        <script>
+            $(document).ready(function(){
+                isLogged(function(status){
+                    console.log(status);
+                    if(status.logged==='true')window.location.replace("dashboard.html");
+                });
+            });
+        </script>
     </body>
 </html>

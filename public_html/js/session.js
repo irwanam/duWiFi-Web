@@ -40,3 +40,15 @@ function memberLogin(data){
         }
     });
 }
+
+function memberLogout(){
+    var dataLogout= "session_logout=true";
+    $.ajax({
+        type: 'post',
+        url: "app/Session.php",
+        data: dataLogout,
+        success: function(){
+            window.location.replace("index.html");
+        }
+    });
+}

@@ -40,16 +40,20 @@
         {
             $con = new Database();
             $db = $con->connect();
-            $data = $db->query("SELECT id FROM member WHERE email='$data->email' AND password='$data->password'");
+            $data = $db->query("SELECT * FROM member WHERE email='$data->email' AND password='$data->password'");
             $exist = $data->rowCount();
             $member = $data->fetch(PDO::FETCH_ASSOC);
             
             if($exist !== 0){
                 $arr = array(
                     'success' => 'true',
-                    'id' => $member['id']
-                );
-		
+                    'id' => $member['id'],
+                    'first_name' => $member['first_name'],
+                    'last_name' => $member['last_name'],
+                    'email' => $member['email'],
+                    'username' => $member['username'],
+                    'password' => $member['password'],
+                );		
             } else {
                 $arr = array(
                     'success' => 'false'

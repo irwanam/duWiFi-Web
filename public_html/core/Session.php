@@ -29,8 +29,14 @@
         
         public function start($data)
         {
-            $_SESSION['is_logged']='true';
-            $_SESSION['id']=$data['id'];
+            $_SESSION = array(
+                'is_logged' => 'true',
+                'id' => $data['id'],
+                'name' => $data['first_name'].' '.$data['last_name'],
+                'email' => $data['email'],
+                'username' => $data['username'],
+                'password' => $data['password']
+            );
         }
         
         public function stop()

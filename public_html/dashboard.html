@@ -11,9 +11,84 @@
         <link rel="stylesheet" href="css/duwifi.css">
     </head>
     <body class="metro">
-        <h1>Dashboard Page</h1>
-        
-        
+        <header>
+            <nav class="navigation-bar dark" role="navigation">
+                <div class="navigation-bar-content container">
+                    <a class="element brand-title no-tablet-portrait no-phone" href="#">DU WIFI</a>
+                    <a class="element brand-title no-desktop image-button image-left place-right" href="#">
+                            <span id="navMemberName-ph"></span>
+                            <img id="navMemberIcon-ph" src="" />
+                    </a>
+                    <span class="element-divider"></span>
+                    <a class="element1 pull-menu" href="#" ></a>
+                    <ul class="element-menu">
+                        <li class="no-desktop">
+                            <a href="#ctn" onclick="" class="element-menu button danger">KELUAR</a>
+                        </li>
+                    </ul>
+                    <div class="no-tablet-portrait no-phone">
+                        <ul class="element-menu place-right">
+                            <li>
+                                <button class="element image-button image-left place-right">
+                                    <span id="navMemberName"></span>
+                                    <img id="navMemberIcon" src="" />
+                                </button>
+                            </li>
+                            <li>
+                                <span class="element-divider"></span>
+                            </li>
+                            <li>
+                                <a><span class="icon-mail"></span></a>
+                            </li>
+                            <li>
+                                <a><span class="icon-bell"></span></a>
+                            </li>
+                            <li>
+                                <span class="element-divider"></span>
+                            </li>
+                            <li>
+                                <a class="element-menu dropdown-toggle" href="#">
+                                    <span class="icon-cog"></span>
+                                </a>
+                                <ul class="dropdown-menu place-right" data-role="dropdown">
+                                    <li><a href="#" onclick="memberLogout();return false">KELUAR</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+            </nav>
+        </header>
+        <main>
+            <div id="main-panel" class="container">
+                <div class="grid">
+                    <div class="row">
+                        <div class="span4">
+                            <div class="listview">
+                                <a id="inetBtn" class="list" onclick="startInet();return false">
+                                    <div id="inetBtnCtn" class="list-content bg-lightGreen fg-white">
+                                        <i class="icon icon-switch"></i>
+                                        <div class="data">
+                                            <span class="list-title">Mulai</span>
+                                            <div id="inetBtnProgress" class="progress-bar"
+                                                data-role="progress-bar"
+                                                data-value="100"
+                                                data-color="bg-green">
+                                            </div>
+                                            <span class="list-remark">Sisa waktu : 120 Menit</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="span8">
+                            <h1>Span 9</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
         <footer></footer>
         <script src="js/jquery-2.1.1.min.js"></script>
         <script src="js/jquery-ui-1.9.2.custom.min.js"></script>
@@ -22,12 +97,51 @@
         <script src="js/docs.js"></script>
         <script src="js/session.js"></script>
         <script>
+            var loginData;
             $(document).ready(function(){
                 isLogged(function(status){
-                    console.log(status);
+                    //console.log(status);
                     if(status.logged==='false')window.location.replace("index.html");
+                    $("#navMemberName").text(status.name);
+                    $("#navMemberName-ph").text(status.name);
+                    $("#navMemberIcon").attr('src','assets/members/icon/'+status.idmember+'.png');
+                    $("#navMemberIcon-ph").attr('src','assets/members/icon/'+status.idmember+'.png');
+                    loginData = 'username='+status.username+'&password='+status.password;
                 });
             });
+            function startInet()
+            {
+                console.log(loginData);
+                var pb = $("#inetBtnProgress").progressbar();
+                $("#inetBtnCtn").attr('class','list-content bg-lightRed fg-white');
+                $("#inetBtn").attr('onclick','stopInet();return false');
+                pb.progressbar('color', 'bg-red');
+                //var progress = 0;
+                //var progressInterval = (session-inet-limit/100)*1000
+                //var interval = setInterval(
+                //    function(){
+                //        pb.progressbar('value', (++progress));
+                //        if (progress == 100){
+                //           window.clearInterval(interval);
+                //            //stopInet();
+                //        }
+                //    }, 100);
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://portal.duwifi.net/login.html',
+                    data: loginData,
+                    contentType : 'text/plain',
+                    crossDomain : true
+                });
+                alert('Test Login Sukses');
+            }
+            function stopInet()
+            {
+                var pb = $("#inetBtnProgress").progressbar();
+                $("#inetBtnCtn").attr('class','list-content bg-lightGreen fg-white');
+                $("#inetBtn").attr('onclick','startInet();return false');
+                pb.progressbar('color', 'bg-green');
+            }
         </script>
     </body>
 </html>
