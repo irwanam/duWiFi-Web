@@ -15,3 +15,6 @@ and open the template in the editor.
 .icon-duwifi:before{content:url(../assets/img/small-du.png)}
 
 
+.spacer {
+    height: 5px;
+}

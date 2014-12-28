@@ -1,0 +1,309 @@
+<div id="reg" class="page">
+    <div class="grid">
+        <div class="row">
+            <div class="span12">
+                <h1 id="member_name_ctn"><a href="javascript:void(0)" onclick="showDrawer();return false"><i class="icon-arrow-left-3 fg-darker smaller"></i></a> <member_name></member_name> <span id="ch_name_btn" style="font-size: 9pt;"><a href="javascript:void(0)" onclick="showEditName(sessionMemID);return false;">sunting nama</a></span></h1>
+                <div class="row">
+                    <div class="span2">
+                        <div class="image-container" style="width: 120px;">
+                            <img id="member_avatar" class="shadow" data-src="js/holder/holder.js/120x120" alt="120x120" style="width: 120px; height: 120px;">
+                            <div class="overlay-fluid bg-cobalt" style="height: 25px;">
+                                <i class="icon-camera place-right"></i>
+                                <span class="text-right">Unggah gambar</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span6">
+                        <span class="subheader">Profil saya</span>
+                        <div class="row">
+                            <a href="javascript:void(0)">Pendidikan dan Pekerjaan</a><br/>
+                            <a href="javascript:void(0)">Tentang saya lebih rinci</a>
+                        </div>
+                        <div id="member_email_ctn" class="row">
+                            <span><i class="icon-at"></i> <member_email></member_email></span>
+                            <span id="ch_email_btn" style="font-size: 9pt;"><a href="javascript:void(0)"> sunting email</a></span>
+                        </div>
+                        <div id="member_handphone_ctn" class="row">
+                            <span><i class="icon-phone-2"></i> <member_handphone></member_handphone></span>
+                            <span id="ch_handphone_btn" style="font-size: 9pt;"><a href="javascript:void(0)" onclick="showEditHandphone(sessionMemID);return false;"> sunting nomor hp</a></span>
+                        </div>
+                        <div id="member_address_ctn" class="row">
+                            <i class="icon-home"></i>
+                            <address_info></address_info>
+                            <span id="ch_address_btn" style="font-size: 9pt;"><a href="javascript:void(0)" onclick="showEditAddress(sessionMemID);return false;"> sunting alamat</a></span>
+                            <br />
+                            <address id="member_address">
+                                
+                            </address>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $('#ch_email_btn').hide();
+        $('#member_email_ctn').mouseenter(function(){
+            $('#ch_email_btn').show();
+        });
+        $('#member_email_ctn').mouseleave(function(){
+            $('#ch_email_btn').hide();
+        });
+       
+        $('#ch_name_btn').hide();
+        $('#member_name_ctn').mouseenter(function(){
+            $('#ch_name_btn').show();
+        });
+        $('#member_name_ctn').mouseleave(function(){
+            $('#ch_name_btn').hide();
+        });
+        
+        $('#ch_handphone_btn').hide();
+        $('#member_handphone_ctn').mouseenter(function(){
+            $('#ch_handphone_btn').show();
+        });
+        $('#member_handphone_ctn').mouseleave(function(){
+            $('#ch_handphone_btn').hide();
+        });       
+
+        $('#ch_address_btn').hide();
+        $('#member_address_ctn').mouseenter(function(){
+            $('#ch_address_btn').show();
+        });
+        $('#member_address_ctn').mouseleave(function(){
+            $('#ch_address_btn').hide();
+        });
+                
+        showProfileName(sessionMemID);
+        showProfileAvatar(sessionMemID);
+        showProfileEmail(sessionMemID);
+        showProfileHandphone(sessionMemID);
+        showProfileAddress(sessionMemID);
+        
+    });
+    
+    function showProfileName(id)
+    {
+        var dataMember = "getMember="+id;
+        $.ajax({
+            type: 'POST',
+            url: 'app/Member.php',
+            data: dataMember,
+            success : function(data){
+                var member = $.parseJSON(data);
+                $('member_name').text(member.first_name+' '+member.last_name);
+            }
+        });
+    };
+    
+    function showProfileAvatar(id)
+    {
+        var dataMember = "getMember="+id;
+        $.ajax({
+            type: 'POST',
+            url: 'app/Member.php',
+            data: dataMember,
+            success : function(data){
+                var member = $.parseJSON(data);
+                var src;
+                if(member.avatar===null){
+                    src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAEHklEQVR4Xu2dZ0srURRFTxQLYu8FexcRy///BYoN7KiIgg1U7Iqa986BSJQoxmd8yWbNFzWZzM3e6647dz6ZODs7SxqHbAMJAMuyjWAA1uYLYHG+AAawegPi+bgHA1i8AfF4GAxg8QbE42EwgMUbEI+HwQAWb0A8HgYDWLwB8XgYDGDxBsTjYTCAxRsQj4fBABZvQDweBgNYvAHxeBgMYPEGxONhMIDFGxCPh8EAFm9APB4GA1i8AfF4GAxg8QbE42EwgMUbEI+HwQAWb0A8HgYDWLwB8XgYDGDxBsTjYTCAxRsQj4fBABZvQDweBgNYvAHxeBgMYPEGxONhMIDFGxCPh8EAFm9APB4GA/j/NHB3d2cLCwsx+PT0tJWXl9vT05Ntbm7a8fGxPT8/W1lZmQ0NDVlLS0uct7e3Zzs7O/FeVVWVjY2Nxc+vHL893le+00+ck3cGJ5NJOz09tY2NDXt4eLCKiopXwEdHR7a2tmYNDQ02MjJi8/PzAdMnwOPjoy0tLVlNTY319PTE7w53cnLSEonEh1399ng/AS2ba+Qd4KurqwDnxb+8vIS5KYPfB3OIf//vU5h6f39vW1tbNjg4aN3d3TY7OxuvTU1NxYRxs5uammxgYMAWFxdjYkxMTFhRUdGPj1dZWZkNg5yem3eAr6+vA1R7e7utr69bSUlJRsAXFxe2vLwck8AhHhwc2MnJiY2Ojlpra2sYfH5+buPj41ZbWxsQb29vrbq6Ol53y/v7+y0X4zU2NuYUWjYXzzvAqS+fMjkTYL9fuoU3NzexJLvhPhnSAa+srLz5O7W8u7lu2MzMTEyeXI2XDYRcnltwgH2jlbKztLQ0llk39D3QdIPdKP/c3NxcGNvV1RWbs/Tjown13fFyCS2baxcUYL8vr66u2uHhoRUXF8dGq62t7XUH/dE92I3d3d2N+7Bfw3ffPjHc/s8M/pfxsoGQy3MLCrBvltxUX2Z7e3utr6/vtRu/r7q1dXV18bov4Q7Wd9G+lPsjl++mm5ubbX9/3+rr69/ssDMZ/N3xPtu15xJmpmsXFGB/dHI46YebnNpY+Xvb29uxHKeegx2yTwp/dnbwnZ2dAf/y8tKGh4eto6MjLpcJ8HfG++pz92+BzlvAv1WA+jgAFicMYACLNyAeD4MBLN6AeDwMBrB4A+LxMBjA4g2Ix8NgAIs3IB4PgwEs3oB4PAwGsHgD4vEwGMDiDYjHw2AAizcgHg+DASzegHg8DAaweAPi8TAYwOINiMfDYACLNyAeD4MBLN6AeDwMBrB4A+LxMBjA4g2Ix8NgAIs3IB4PgwEs3oB4PAwGsHgD4vEwGMDiDYjHw2AAizcgHg+DASzegHg8DAaweAPi8TAYwOINiMfDYACLNyAeD4MBLN6AeDwMBrB4A+Lx/gBNvfTeLrdxXgAAAABJRU5ErkJggg==';
+                } else {
+                    getMemberAvatarURL(member.avatar,function(avadata){
+                        src = 'assets/members/avatar/'+avadata.src;
+                        $("#member_avatar").attr('src',src);
+                    });
+                }
+                $("#member_avatar").attr('src',src);
+            }
+        });
+    }
+    
+    function showProfileEmail(id)
+    {
+        var dataMember = "getMember="+id;
+        $.ajax({
+            type: 'POST',
+            url: 'app/Member.php',
+            data: dataMember,
+            success : function(data){
+                var member = $.parseJSON(data);
+                $('member_email').text(member.email);
+            }
+        });        
+    }
+    
+    function showProfileHandphone(id)
+    {
+        var dataMember = "getMember="+id;
+        $.ajax({
+            type: 'POST',
+            url: 'app/Member.php',
+            data: dataMember,
+            success : function(data){
+                var member = $.parseJSON(data);
+                if(member.handphone===null){
+                    $('member_handphone').text('Tambahkan nomor hp');
+                } else {
+                    $('member_handphone').text(member.handphone);
+                }
+            }
+        });        
+
+    }
+    
+    function showProfileAddress(id)
+    {
+        var dataMember = "getMember="+id;
+        $.ajax({
+            type: 'POST',
+            url: 'app/Member.php',
+            data: dataMember,
+            success : function(data){
+                var member = $.parseJSON(data);
+                if(member.address===null){
+                    $('#member_address').hide();
+                    $('address_info').html('Tambahkan alamat saya');
+                } else {
+                    $('#member_address').show();
+                    $('address_info').html('<strong>Tempat tinggal saya</strong>');
+                    getMemberAddress(member.address,function(addressdata){
+                        if(addressdata.postal_code===null)addressdata.postal_code='';
+                        var address = addressdata.address+"<br>"+addressdata.village+", "+addressdata.district+"<br>"+addressdata.city+" "+addressdata.postal_code+"<br>";
+                        var homephone;
+                        if(addressdata.phone!==null){
+                            homephone = "<abbr title='Telepon rumah'><i class='icon-phone'></i></abbr> "+addressdata.phone;
+                        } else {
+                            homephone = '';
+                        }
+                        
+                        $('#member_address').html(address+homephone);
+                    });
+                }
+            }
+        });
+    }
+    
+    function showEditName(id)
+    {
+        var dataMember = "getMember="+id;
+        $.ajax({
+            type: 'POST',
+            url: 'app/Member.php',
+            data: dataMember,
+            success : function(data){
+                var member = $.parseJSON(data);
+                $('member_name').html("<input id='saveFirstName' onblur='saveEditName();return false;' type='text' class='subheader' value='"+member.first_name+"' size='"+member.first_name.length+"' placeholder='Depan'/> <input id='saveLastName' onblur='saveEditName();return false;' type='text' class='subheader' value='"+member.last_name+"' size='"+member.last_name.length+"' placeholder='Belakang'/></form>");
+            }
+        });
+    }
+    
+    function saveEditName()
+    {
+        var first_name = $('#saveFirstName').val();
+        var last_name = $('#saveLastName').val();
+        var dataName = 'SaveTrigger=yes&id='+sessionMemID+'&first_name='+first_name+'&last_name='+last_name;
+        $.ajax({
+            type: 'POST',
+            url: 'app/Member.php',
+            data: dataName,
+            success: function(data){
+                console.log(data);
+                showDashboardMember(sessionMemID);
+                showProfileName(sessionMemID);
+            }
+        });
+    }
+
+    function showEditHandphone(id)
+    {
+        var dataMember = "getMember="+id;
+        $.ajax({
+            type: 'POST',
+            url: 'app/Member.php',
+            data: dataMember,
+            success : function(data){
+                var member = $.parseJSON(data);
+                if(member.handphone==null)member.handphone="";
+                $('member_handphone').html("<input id='saveHandphone' onblur='saveEditHandphone();return false;' type='text' class='text' value='"+member.handphone+"' size='15' placeholder='Nomor hp'/>");
+            }
+        });
+    }
+    
+    function saveEditHandphone()
+    {
+        var handphone = $('#saveHandphone').val();
+        if($.isNumeric(handphone)===true){
+            var dataHandphone = 'SaveTrigger=yes&id='+sessionMemID+'&handphone='+handphone;
+            $.ajax({
+                type: 'POST',
+                url: 'app/Member.php',
+                data: dataHandphone,
+                success: function(data){
+                    console.log(data);
+                    showProfileHandphone(sessionMemID);
+                }
+            });
+        } else {
+            showProfileHandphone(sessionMemID);
+        }
+    }
+    
+    function showEditAddress(id)
+    {
+        var dataMember = "getMember="+id;
+        $.ajax({
+            type: 'POST',
+            url: 'app/Member.php',
+            data: dataMember,
+            success : function(data){
+                var member = $.parseJSON(data);
+                var dataAddress,dataVillage,dataDistrict,dataCity,dataPostal_Code,dataPhone;
+                if(member.address==null){
+                    dataAddress = '';
+                    dataVillage = '';
+                    dataDistrict = '';
+                    dataCity = '';
+                    dataPostal_Code = '';
+                    dataPhone = '';
+                    var inputAddress = "<input id='saveAddressAddress' type='text' class='text' size='24' value='"+dataAddress+"' placeholder='Nama Jalan'/>";
+                    var inputVillage = "<input id='saveAddressVillage' type='text' class='text' size='12' value='"+dataVillage+"' placeholder='Kelurahan'/>";
+                    var inputDistrict = "<input id='saveAddressDistrict' type='text' class='text' size='12' value='"+dataDistrict+"' placeholder='Kecamatan'/>";
+                    var inputCity = "<input id='saveAddressCity' type='text' class='text' size='12' value='"+dataCity+"' placeholder='Kota'/>";
+                    var inputPostal_Code = "<input id='saveAddressPostal_Code' type='text' class='text' size='5' value='"+dataPostal_Code+"' placeholder='Kode Pos'/>";
+                    var inputPhone = "<input id='saveAddressPhone' type='text' class='text' size='15' value='"+dataPhone+"' placeholder='Nomor telp rumah'/>";
+                    var inputSave = "<a href='javascript:void(0)' onclick='saveEditAddress(sessionMemID);return false;' class='button primary small'>Simpan</a>";
+                    var inputCancel = "<a href='javascript:void(0)' onclick='showProfileAddress(sessionMemID);return false;' class='button danger small'>Batal</a>";
+                    $('#member_address').show();
+                    $('#member_address').html(inputAddress+"<br/>"+inputVillage+"  "+inputDistrict+"<br/>"+inputCity+"  "+inputPostal_Code+"<br/>"+inputPhone+"<br/>"+inputSave+"  "+inputCancel);
+                } else {
+                    getMemberAddress(member.address,function(currentAddress){
+                        dataAddress = (currentAddress.address !== null ? currentAddress.address : '');
+                        dataVillage = (currentAddress.village !== null ? currentAddress.village : '');
+                        dataDistrict = (currentAddress.district !== null ? currentAddress.district : '');
+                        dataCity = (currentAddress.city !== null ? currentAddress.city : '');
+                        dataPostal_Code = (currentAddress.postal_code !== null ? currentAddress.postal_code : '');
+                        dataPhone = (currentAddress.phone !== null ? currentAddress.phone : '');
+                        var inputAddress = "<input id='saveAddressAddress' type='text' class='text' size='24' value='"+dataAddress+"' placeholder='Nama Jalan'/>";
+                        var inputVillage = "<input id='saveAddressVillage' type='text' class='text' size='12' value='"+dataVillage+"' placeholder='Kelurahan'/>";
+                        var inputDistrict = "<input id='saveAddressDistrict' type='text' class='text' size='12' value='"+dataDistrict+"' placeholder='Kecamatan'/>";
+                        var inputCity = "<input id='saveAddressCity' type='text' class='text' size='12' value='"+dataCity+"' placeholder='Kota'/>";
+                        var inputPostal_Code = "<input id='saveAddressPostal_Code' type='text' class='text' size='5' value='"+dataPostal_Code+"' placeholder='Kode Pos'/>";
+                        var inputPhone = "<input id='saveAddressPhone' type='text' class='text' size='15' value='"+dataPhone+"' placeholder='Nomor telp rumah'/>";
+                        var inputSave = "<a href='javascript:void(0)' onclick='saveEditAddress(sessionMemID);return false;' class='button primary small'>Simpan</a>";
+                        var inputCancel = "<a href='javascript:void(0)' onclick='showProfileAddress(sessionMemID);return false;' class='button danger small'>Batal</a>";
+                        $('#member_address').show();
+                        $('#member_address').html(inputAddress+"<br/>"+inputVillage+"  "+inputDistrict+"<br/>"+inputCity+"  "+inputPostal_Code+"<br/>"+inputPhone+"<br/>"+inputSave+"  "+inputCancel);
+                    });
+                }
+            }
+        });
+    }
+    
+    function saveEditAddress(id)
+    {
+        showProfileAddress(sessionMemID);
+    }
+</script>

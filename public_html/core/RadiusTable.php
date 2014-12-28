@@ -57,5 +57,17 @@
             $sth->bindParam(':value',$data['value'],PDO::PARAM_STR);
             $sth->execute();
         }
+        
+        public function usedSessionTime($data)
+        {
+            $username = $data['username'];
+            $con = new Database();
+            $db = $con->connect();
+            $res = $db->query("SELECT SUM(acctsessiontime)AS usedSessionTime FROM radacct where username='$username'");
+            
+            $record = $res->fetch(PDO::FETCH_ASSOC);
+            
+            return $record['usedSessionTime'];
+        }
     }   
 ?>

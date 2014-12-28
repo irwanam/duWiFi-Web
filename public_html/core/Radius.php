@@ -78,8 +78,39 @@
                         );
                 return $arr;
             }
+        }
+        
+        public function leftSessionTime($username)
+        {
+            $radiusData = array (
+                'username'  => $username,
+                'attribute' => 'Max-All-Session',
+            );
+            $radiusTable = new RadiusTable();
+            $data = $radiusTable->findRadcheck($radiusData);
+            $usedSessionTime = (int)$radiusTable->usedSessionTime($radiusData);
+            $leftTime = (int)$data['value']-$usedSessionTime;
             
-
+            $sisamenit = $leftTime/60;
+            $sisamenit*=1;
+            $sisamenit=floor($sisamenit);
+            $sisamenit/=1;
+            $sisamenit=$sisamenit%60;
+            
+            $sisajam = $leftTime/3600;
+            $sisajam*=1;
+            $sisajam=floor($sisajam);
+            $sisajam/=1;
+                    
+            $arr = array(
+                'hours' => $sisajam,
+                'minutes' => $sisamenit,
+                'seconds' => (string)$leftTime%60,
+                'lefttotal' => $leftTime,
+                'usedtotal' => $usedSessionTime
+            );
+            
+            return $arr;
         }
     }
 ?>

@@ -14,8 +14,8 @@
         <header>
             <nav class="navigation-bar dark" role="navigation">
                 <div class="navigation-bar-content container">
-                    <a class="element brand-title no-tablet-portrait no-phone" href="#">DU WIFI</a>
-                    <a class="element brand-title no-desktop image-button image-left place-right" href="#">
+                    <a class="element brand-title no-tablet-portrait no-phone" href="javascript:void(0)">DU WIFI</a>
+                    <a class="element brand-title no-desktop image-button image-left place-right" href="javascript:void(0)" onclick="showProfile();return false;">
                             <span id="navMemberName-ph"></span>
                             <img id="navMemberIcon-ph" src="" />
                     </a>
@@ -23,19 +23,22 @@
                     <a class="element1 pull-menu" href="#" ></a>
                     <ul class="element-menu">
                         <li class="no-desktop">
-                            <a href="#ctn" onclick="" class="element-menu button danger">KELUAR</a>
+                            <a href="#" onclick="memberLogout();return false;" class="element-menu button danger">KELUAR</a>
                         </li>
                     </ul>
                     <div class="no-tablet-portrait no-phone">
                         <ul class="element-menu place-right">
                             <li>
-                                <button class="element image-button image-left place-right">
+                                <button class="element image-button image-left place-right" onclick="showProfile();return false;">
                                     <span id="navMemberName"></span>
                                     <img id="navMemberIcon" src="" />
                                 </button>
                             </li>
                             <li>
                                 <span class="element-divider"></span>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" onclick="showDrawer();return false;"><span class="icon-grid-view"></span></a>
                             </li>
                             <li>
                                 <a><span class="icon-mail"></span></a>
@@ -51,43 +54,34 @@
                                     <span class="icon-cog"></span>
                                 </a>
                                 <ul class="dropdown-menu place-right" data-role="dropdown">
-                                    <li><a href="#" onclick="memberLogout();return false">KELUAR</a></li>
+                                    <li><a href="javascript:void(0)" onclick="memberLogout();return false;">KELUAR</a></li>
                                 </ul>
                             </li>
                         </ul>
                     </div>
                 </div>
-                
             </nav>
         </header>
         <main>
-            <div id="main-panel" class="container">
-                <div class="grid">
-                    <div class="row">
-                        <div class="span4">
-                            <div class="listview">
-                                <a id="inetBtn" class="list" onclick="startInet();return false">
-                                    <div id="inetBtnCtn" class="list-content bg-lightGreen fg-white">
-                                        <i class="icon icon-switch"></i>
-                                        <div class="data">
-                                            <span id="inetBtnState" class="list-title"></span>
-                                            <div id="inetBtnProgress" class="progress-bar"
-                                                data-role="progress-bar"
-                                                data-value="100"
-                                                data-color="bg-green">
-                                            </div>
-                                            <span class="list-remark">Sisa waktu : 120 Menit</span>
-                                        </div>
+                <div id="drawer" class="container">
+                    <div class="grid">
+                        <div class="row">
+                            <div class="span12">
+                                <div id="inetBtn" class="tile double bg-lightGreen fg-white" onclick="startInet();return false">
+                                    <div id="inetBtnCtn" class="tile-content icon">
+                                        <i class="icon-switch"></i>
                                     </div>
-                                </a>
+                                    <div class="brand bg-black fg-white opacity">
+                                            <span id="inetBtnState" class="text"></span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="span8">
-                            <h1>Span 9</h1>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div id="ctn" class="container">
+                    
+                </div>
         </main>
         <footer></footer>
         <script src="js/jquery-2.1.1.min.js"></script>
@@ -96,93 +90,29 @@
         <script src="js/jquery.validate.js"></script>
         <script src="js/docs.js"></script>
         <script src="js/session.js"></script>
+        <script src="js/dboardlib.js"></script>
         <script>
             var loginData;
+            var sessionRadUser;
+            var sessionRadStatus;
+            var sessionMemID;
+            
             $(document).ready(function(){
                 isLogged(function(status){
                     //console.log(status);
                     if(status.logged==='false')window.location.replace("index.html");
-                    $("#navMemberName").text(status.name);
-                    $("#navMemberName-ph").text(status.name);
-                    $("#navMemberIcon").attr('src','assets/members/icon/'+status.idmember+'.png');
-                    $("#navMemberIcon-ph").attr('src','assets/members/icon/'+status.idmember+'.png');
+                    showDashboardMember(status.idmember);
                     loginData = 'username='+status.username+'&password='+status.password;
-                    hotspotStatus = status.hotspot;
-                    if(status.hotspot==='offline'){
-                        offlineInetState()
+                    sessionMemID = status.idmember;
+                    sessionRadUser = status.username;
+                    sessionRadStatus = status.hotspot;
+                    if(sessionRadStatus==='offline'){
+                        offlineInetState();
                     } else {
                         onlineInetState();
                     }
                 });
             });
-            function startInet()
-            {
-                //console.log(loginData);
-                $.ajax({
-                    type: 'POST',
-                    url: 'http://portal.duwifi.net/login.html',
-                    data: loginData,
-                    contentType : 'text/plain',
-                    crossDomain : true
-                });
-                
-                var loginHotspot = "session_hotspot_login=online";
-                $.ajax({
-                    type: 'POST',
-                    url: 'app/Session.php',
-                    data: loginHotspot,
-                });onlineInetState();
-                
-                var pb = $("#inetBtnProgress").progressbar();
-                pb.progressbar('color', 'bg-red');
-                //var progress = 0;
-                //var progressInterval = (session-inet-limit/100)*1000
-                //var interval = setInterval(
-                //    function(){
-                //        pb.progressbar('value', (++progress));
-                //        if (progress == 100){
-                //           window.clearInterval(interval);
-                //            //stopInet();
-                //        }
-                //    }, 100);
-                alert('Test Start Hotspot Sukses');
-            }
-            function stopInet()
-            {
-                $.ajax({
-                    type: 'POST',
-                    url: 'http://portal.duwifi.net/logout.html',
-                    data: loginData,
-                    contentType : 'text/plain',
-                    crossDomain : true
-                });
-                
-                var logoutHotspot = "session_hotspot_login=offline";
-                $.ajax({
-                    type: 'POST',
-                    url: 'app/Session.php',
-                    data: logoutHotspot,
-                });
-                offlineInetState();
-                alert('Test Stop Hotspot Sukses');
-            }
-            
-            function onlineInetState()
-            {
-                var pb = $("#inetBtnProgress").progressbar();
-                $("#inetBtnCtn").attr('class','list-content bg-lightRed fg-white');
-                $("#inetBtn").attr('onclick','stopInet();return false');
-                $("#inetBtnState").text('STOP');
-                pb.progressbar('color', 'bg-red');
-            }
-            function offlineInetState()
-            {
-                var pb = $("#inetBtnProgress").progressbar();
-                $("#inetBtnCtn").attr('class','list-content bg-lightGreen fg-white');
-                $("#inetBtn").attr('onclick','startInet();return false');
-                $("#inetBtnState").text('MULAI');
-                pb.progressbar('color', 'bg-green');
-            }
         </script>
     </body>
 </html>

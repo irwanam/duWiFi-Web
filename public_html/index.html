@@ -4,11 +4,36 @@
         <title>duWiFi</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="referrer" content="never">
         <link rel="stylesheet" href="css/iconFont.min.css">
         <link rel="stylesheet" href="css/metro-bootstrap-responsive.min.css">
         <link rel="stylesheet" href="css/metro-bootstrap.min.css">
         <link rel="stylesheet" href="css/no-theme/jquery-ui-1.9.2.custom.min.css">
         <link rel="stylesheet" href="css/duwifi.css">
+        <script src="js/jquery-2.1.1.min.js"></script>
+        <script src="js/jquery-ui-1.9.2.custom.min.js"></script>
+        <script src="js/metro/metro.min.js"></script>
+        <script src="js/jquery.validate.js"></script>
+        <script src="js/docs.js"></script>
+        <script src="js/session.js"></script>
+        <script>
+            $(document).ready(function(){
+                isLogged(function(status){
+                    console.log(status);
+                    if(status.logged==='true')window.location.replace("dashboard.html");
+                });
+                $("#ctn").load('default.html');
+            });
+            function regPage(){
+                $("#ctn").load('view/Member/Register.html');
+            }
+            function loginPage(){
+                $("#ctn").load('login.html');
+            }
+            function defaultPage(){
+                $("#ctn").load('default.html');
+            }
+        </script>
     </head>
     <body class="metro">
         <header>
@@ -18,7 +43,7 @@
                     <a class="element brand-title" href="index.html">DU WIFI</a>
 
                     <span class="element-divider"></span>
-                    <a class="element1 pull-menu" href="#" ></a>
+                    <a class="element1 pull-menu" href="javascript:void(0)" ></a>
                     
                     <ul class="element-menu">
                         <li class="no-desktop">
@@ -31,7 +56,7 @@
                             <a href="http://www.datautama.net.id" target="blank">DATA UTAMA NET</a>
                         </li>
                         <li>
-                            <a href="#" >TENTANG DU WIFI</a>
+                            <a href="javascript:void(0)" >TENTANG DU WIFI</a>
                         </li>
                     </ul>
                      
@@ -69,19 +94,5 @@
             </div>
         </main>
         <footer></footer>
-        <script src="js/jquery-2.1.1.min.js"></script>
-        <script src="js/jquery-ui-1.9.2.custom.min.js"></script>
-        <script src="js/metro/metro.min.js"></script>
-        <script src="js/jquery.validate.js"></script>
-        <script src="js/docs.js"></script>
-        <script src="js/session.js"></script>
-        <script>
-            $(document).ready(function(){
-                isLogged(function(status){
-                    console.log(status);
-                    if(status.logged==='true')window.location.replace("dashboard.html");
-                });
-            });
-        </script>
     </body>
 </html>

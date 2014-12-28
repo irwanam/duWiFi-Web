@@ -42,7 +42,7 @@ function memberLogin(data){
 }
 
 function memberLogout(){
-    stopInet();
+    if(sessionRadStatus==='online')stopInet();
     var dataLogout= "session_logout=true";
     $.ajax({
         type: 'post',

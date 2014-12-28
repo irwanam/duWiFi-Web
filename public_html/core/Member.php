@@ -9,8 +9,9 @@
         public $last_name;
         public $email;
         public $password;
+        public $handphone;
         public $address;
-        public $city;
+        public $avatar;
         public $company;
         public $sex;
         public $dob;
@@ -29,8 +30,9 @@
             $this->email        = (isset($data['email'])) ? $data['email'] : null;
             $this->username     = (isset($data['username'])) ? $data['username'] : null;
             $this->password     = (isset($data['password'])) ? $data['password'] : null;
+            $this->handphone    = (isset($data['handphone'])) ? $data['handphone'] : null;
             $this->address      = (isset($data['address'])) ? $data['address'] : null;
-            $this->city         = (isset($data['city'])) ? $data['city'] : null;
+            $this->avatar       = (isset($data['avatar'])) ? $data['avatar'] : null;
             $this->company      = (isset($data['company'])) ? $data['company'] : null;
             $this->sex          = (isset($data['sex'])) ? $data['sex'] : null;
             $this->dob          = (isset($data['dob'])) ? $data['dob'] : null;
@@ -47,8 +49,9 @@
                 'email'         => $data->email,
                 'username'      => $data->username,
                 'password'      => $data->password,
+                'handphone'     => $data->handphone,
                 'address'       => $data->address,
-                'city'          => $data->city,
+                'avatar'        => $data->avatar,
                 'company'       => $data->company,
                 'sex'           => $data->sex,
                 'dob'           => $data->dob
@@ -58,12 +61,14 @@
                 $memberTable->insertMember($memberData);
                 $arr = array(
                     'success' => 'true',
+                    'action' => 'register',
                     'email' => $data->email
                         );
             } else {
+                $memberTable->updateMember($memberData);
                 $arr = array(
-                    'success' => 'false',
-                    'email' => $data->email
+                    'success' => 'true',
+                    'action' => 'save'
                         );
             }
             return $arr;
@@ -72,8 +77,29 @@
         public function getAllMembers()
         {
             $db = new MemberTable();
-            $member = $db->getData('member');
+            $member = $db->getAllData('member');
             return $member;
+        }
+        
+        public function getMember($id)
+        {
+            $db = new MemberTable();
+            $member = $db->getData('member',$id);
+            return $member;
+        }
+        
+        public function getAvatar($avaid)
+        {
+            $db = new MemberTable();
+            $avatar = $db->getData('avatar',$avaid);
+            return $avatar;
+        }
+        
+        public function getAddress($addressid)
+        {
+            $db = new MemberTable();
+            $address = $db->getData('address',$addressid);
+            return $address;
         }
         
         public function existEmail($email)
