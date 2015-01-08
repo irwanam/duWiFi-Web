@@ -94,14 +94,7 @@
             $avatar = $db->getData('avatar',$avaid);
             return $avatar;
         }
-        
-        public function getAddress($addressid)
-        {
-            $db = new MemberTable();
-            $address = $db->getData('address',$addressid);
-            return $address;
-        }
-        
+                
         public function existEmail($email)
         {
             $table = new MemberTable();

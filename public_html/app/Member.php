@@ -1,10 +1,10 @@
 <?php
     require_once '../core/Member.php';
     require_once '../core/Radius.php';
-    
+    require_once '../core/Address.php';
     $member = new Member();
     $radius = new Radius();
-    
+    $address = new Address();
     ########################## CONFIG ##############################
     
     $MEMBER_CONFIG['new_username'] = $member->newUsername(8);
@@ -80,7 +80,27 @@
     }
     
     if(isset($_POST['getAddress'])){
-        $resAddress = $member->getAddress($_POST['getAddress']);
+        $resAddress = $address->getAddress($_POST['getAddress']);
         echo json_encode($resAddress);
+    }
+    
+    if(isset($_POST['SaveAddressTrigger'])){
+        $currentAddress = $address->getAddress($_POST['idaddress']);
+        $data = array(
+            'idmember'     => $_POST['idmember'],
+            'idaddress'    => (!empty($_POST['idaddress'])) ? $_POST['idaddress'] : $currentAddress['idaddress'],
+            'address'      => (!empty($_POST['address'])) ? $_POST['address'] : $currentAddress['address'],
+            'village'      => (!empty($_POST['village'])) ? $_POST['village'] : $currentAddress['village'],
+            'district'     => (!empty($_POST['district'])) ? $_POST['district'] : $currentAddress['district'],
+            'city'         => (!empty($_POST['city'])) ? $_POST['city'] : $currentAddress['city'],
+            'postal_code'  => (!empty($_POST['postal_code'])) ? $_POST['postal_code'] : $currentAddress['postal_code'],
+            'phone'        => (!empty($_POST['phone'])) ? $_POST['phone'] : $currentAddress['phone'],
+        );
+        
+        //Insert into database
+        $resAddress = $address->saveAddress($address->exchangeArray($data));
+        
+        //JSON feedback
+        echo json_encode($resAddress);   
     }
 ?>

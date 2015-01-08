@@ -260,32 +260,36 @@
             data: dataMember,
             success : function(data){
                 var member = $.parseJSON(data);
-                var dataAddress,dataVillage,dataDistrict,dataCity,dataPostal_Code,dataPhone;
+                var dataIdAddress,dataAddress,dataVillage,dataDistrict,dataCity,dataPostal_Code,dataPhone;
                 if(member.address==null){
+                    dataIdAddress = '';
                     dataAddress = '';
                     dataVillage = '';
                     dataDistrict = '';
                     dataCity = '';
                     dataPostal_Code = '';
                     dataPhone = '';
+                    var inputID = "<input id='saveAddressID' type='hidden' class='text' value='"+dataIdAddress+"'/>";
                     var inputAddress = "<input id='saveAddressAddress' type='text' class='text' size='24' value='"+dataAddress+"' placeholder='Nama Jalan'/>";
                     var inputVillage = "<input id='saveAddressVillage' type='text' class='text' size='12' value='"+dataVillage+"' placeholder='Kelurahan'/>";
                     var inputDistrict = "<input id='saveAddressDistrict' type='text' class='text' size='12' value='"+dataDistrict+"' placeholder='Kecamatan'/>";
-                    var inputCity = "<input id='saveAddressCity' type='text' class='text' size='12' value='"+dataCity+"' placeholder='Kota'/>";
+                    var inputCity = "<input required id='saveAddressCity' type='text' class='text' size='12' value='"+dataCity+"' placeholder='Kota'/>";
                     var inputPostal_Code = "<input id='saveAddressPostal_Code' type='text' class='text' size='5' value='"+dataPostal_Code+"' placeholder='Kode Pos'/>";
                     var inputPhone = "<input id='saveAddressPhone' type='text' class='text' size='15' value='"+dataPhone+"' placeholder='Nomor telp rumah'/>";
                     var inputSave = "<a href='javascript:void(0)' onclick='saveEditAddress(sessionMemID);return false;' class='button primary small'>Simpan</a>";
                     var inputCancel = "<a href='javascript:void(0)' onclick='showProfileAddress(sessionMemID);return false;' class='button danger small'>Batal</a>";
                     $('#member_address').show();
-                    $('#member_address').html(inputAddress+"<br/>"+inputVillage+"  "+inputDistrict+"<br/>"+inputCity+"  "+inputPostal_Code+"<br/>"+inputPhone+"<br/>"+inputSave+"  "+inputCancel);
+                    $('#member_address').html(inputID+inputAddress+"<br/>"+inputVillage+"  "+inputDistrict+"<br/>"+inputCity+"  "+inputPostal_Code+"<br/>"+inputPhone+"<br/>"+inputSave+"  "+inputCancel);
                 } else {
                     getMemberAddress(member.address,function(currentAddress){
+                        dataIdAddress = currentAddress.id;
                         dataAddress = (currentAddress.address !== null ? currentAddress.address : '');
                         dataVillage = (currentAddress.village !== null ? currentAddress.village : '');
                         dataDistrict = (currentAddress.district !== null ? currentAddress.district : '');
                         dataCity = (currentAddress.city !== null ? currentAddress.city : '');
                         dataPostal_Code = (currentAddress.postal_code !== null ? currentAddress.postal_code : '');
                         dataPhone = (currentAddress.phone !== null ? currentAddress.phone : '');
+                        var inputID = "<input id='saveAddressID' type='hidden' class='text' value='"+dataIdAddress+"'/>";
                         var inputAddress = "<input id='saveAddressAddress' type='text' class='text' size='24' value='"+dataAddress+"' placeholder='Nama Jalan'/>";
                         var inputVillage = "<input id='saveAddressVillage' type='text' class='text' size='12' value='"+dataVillage+"' placeholder='Kelurahan'/>";
                         var inputDistrict = "<input id='saveAddressDistrict' type='text' class='text' size='12' value='"+dataDistrict+"' placeholder='Kecamatan'/>";
@@ -295,7 +299,7 @@
                         var inputSave = "<a href='javascript:void(0)' onclick='saveEditAddress(sessionMemID);return false;' class='button primary small'>Simpan</a>";
                         var inputCancel = "<a href='javascript:void(0)' onclick='showProfileAddress(sessionMemID);return false;' class='button danger small'>Batal</a>";
                         $('#member_address').show();
-                        $('#member_address').html(inputAddress+"<br/>"+inputVillage+"  "+inputDistrict+"<br/>"+inputCity+"  "+inputPostal_Code+"<br/>"+inputPhone+"<br/>"+inputSave+"  "+inputCancel);
+                        $('#member_address').html(inputID+inputAddress+"<br/>"+inputVillage+"  "+inputDistrict+"<br/>"+inputCity+"  "+inputPostal_Code+"<br/>"+inputPhone+"<br/>"+inputSave+"  "+inputCancel);
                     });
                 }
             }
@@ -304,6 +308,22 @@
     
     function saveEditAddress(id)
     {
-        showProfileAddress(sessionMemID);
+        var idaddress= $("#saveAddressID").val();
+        var address  = $("#saveAddressAddress").val();
+        var village  = $("#saveAddressVillage").val();
+        var district = $("#saveAddressDistrict").val();
+        var city     = $("#saveAddressCity").val();
+        var postal_code = $("#saveAddressPostal_Code").val();
+        var phone    = $("#saveAddressPhone").val();
+        var dataAddress = 'SaveAddressTrigger=yes&idmember='+sessionMemID+'&idaddress='+idaddress+'&address='+address+'&village='+village+'&district='+district+'&city='+city+'&postal_code='+postal_code+'&phone='+phone;
+        $.ajax({
+            type: 'POST',
+            url: 'app/Member.php',
+            data: dataAddress,
+            success: function(data){
+                //console.log(data);
+                showProfileAddress(sessionMemID);
+            }
+        });
     }
 </script>
